@@ -158,7 +158,6 @@ namespace StudentExercisesMVC.Controllers
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
                         {
-                            //return new StatusCodeResult(StatusCodes.Status204NoContent);
                             return RedirectToAction(nameof(Index));
                         }
                         throw new Exception("No rows affected");

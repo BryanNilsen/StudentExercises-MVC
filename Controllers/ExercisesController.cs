@@ -70,19 +70,34 @@ namespace StudentExercisesMVC.Controllers
         // GET: Exercises/Create
         public ActionResult Create()
         {
+
             return View();
         }
 
         // POST: Exercises/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Exercise exercise)
         {
             try
             {
-                // TODO: Add insert logic here
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"INSERT INTO Exercise
+                ( Label, Language )
+                VALUES
+                ( @label, @language )";
+                        cmd.Parameters.Add(new SqlParameter("@label", exercise.Label));
+                        cmd.Parameters.Add(new SqlParameter("@language", exercise.Language));
+                        cmd.ExecuteNonQuery();
 
-                return RedirectToAction(nameof(Index));
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
             }
             catch
             {
@@ -100,13 +115,31 @@ namespace StudentExercisesMVC.Controllers
         // POST: Exercises/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Exercise exercise)
         {
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"UPDATE Exercise
+                                            SET Label = @label,
+                                                Language = @language
+                                            WHERE Id = @id";
+                        cmd.Parameters.Add(new SqlParameter("@label", exercise.Label));
+                        cmd.Parameters.Add(new SqlParameter("@language", exercise.Language));
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        if (rowsAffected > 0)
+                        {
+                            //return new StatusCodeResult(StatusCodes.Status204NoContent);
+                            return RedirectToAction(nameof(Index));
+                        }
+                        throw new Exception("No rows affected");
+                    }
+                }
             }
             catch
             {
