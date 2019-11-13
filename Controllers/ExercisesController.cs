@@ -63,8 +63,8 @@ namespace StudentExercisesMVC.Controllers
         // GET: Exercises/Details/5
         public ActionResult Details(int id)
         {
-            var Exercise = GetById(id);
-            return View(Exercise);
+            var exercise = GetById(id);
+            return View(exercise);
         }
 
         // GET: Exercises/Create
@@ -93,7 +93,8 @@ namespace StudentExercisesMVC.Controllers
         // GET: Exercises/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var exercise = GetById(id);
+            return View(exercise);
         }
 
         // POST: Exercises/Edit/5
@@ -136,6 +137,8 @@ namespace StudentExercisesMVC.Controllers
             }
         }
 
+        // :: HELPER METHODS ::
+        // GET EXERCISE BY ID
         private Exercise GetById(int id)
         {
             using (SqlConnection conn = Connection)
@@ -143,9 +146,9 @@ namespace StudentExercisesMVC.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT e.Id, e.Label, e.Language
-                                FROM Exercise e 
-                                WHERE e.Id = @id";
+                    cmd.CommandText = @"SELECT Id, Label, Language
+                                FROM Exercise 
+                                WHERE Id = @id";
 
                     cmd.Parameters.Add(new SqlParameter("@id", id));
                     SqlDataReader reader = cmd.ExecuteReader();

@@ -72,7 +72,7 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Details/5
         public ActionResult Details(int id)
         {
-            var student = GetById(id);
+            Student student = GetById(id);
             return View(student);
         }
 
