@@ -179,8 +179,9 @@ namespace StudentExercisesMVC.Controllers
 
         // POST: Students/Delete/5
         [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
             try
             {
